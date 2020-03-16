@@ -13,7 +13,7 @@
         <Button x:Name="btn_visualize" Content="Visualizza" HorizontalAlignment="Left" Margin="235,51,0,0" VerticalAlignment="Top" Width="120" Click="Btn_visualize_Click" Height="55" FontSize="20"/>
         <ListBox x:Name="lst_collection" HorizontalAlignment="Left" Height="216" Margin="235,133,0,0" VerticalAlignment="Top" Width="330" OpacityMask="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" FontWeight="Bold" FontSize="16">
             <ListBox.Background>
-                <SolidColorBrush Color="#FFA6C0F7" Opacity="0.5"/>
+                <SolidColorBrush Color="#FFA6C0F7" Opacity="0.7"/>
             </ListBox.Background>
         </ListBox>
         <Button x:Name="btn_stop" Content="Ferma" HorizontalAlignment="Left" Margin="445,51,0,0" VerticalAlignment="Top" Width="120" Click="Btn_stop_Click" Height="55" FontSize="20" Background="#FFFF1212" Foreground="White" FontWeight="Bold"/>

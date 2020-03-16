@@ -41,7 +41,6 @@ namespace Puzzle_XML
                 ct = new CancellationTokenSource();
             lst_collection.Items.Clear();
             puzzles.Clear();
-            //Task.Factory.StartNew(()=>Load());
             Task load = new Task(() =>
             {
                 lock (padlock)

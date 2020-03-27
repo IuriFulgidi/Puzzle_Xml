@@ -22,14 +22,9 @@ namespace Puzzle_XML
     /// </summary>
     public partial class MainWindow : Window
     {
-        //creazione lista
-        List<Puzzle> puzzles = new List<Puzzle>();
-
         //token per lo stop
         CancellationTokenSource ct = new CancellationTokenSource();
 
-        //token per il lock dell'azione principale
-        object padlock = new object();
         public MainWindow()
         {
             InitializeComponent();
@@ -40,13 +35,12 @@ namespace Puzzle_XML
             if (ct.Token.IsCancellationRequested)
                 ct = new CancellationTokenSource();
             lst_collection.Items.Clear();
-            puzzles.Clear();
-            Task load = new Task(() =>
-            {
-                lock (padlock)
-                    Load();
-            });
-            load.Start();
+
+            //caricamento
+            Task.Factory.StartNew(()=>Load());
+
+            //disattivamento del buttone
+            btn_visualize.IsEnabled=false;
         }
 
         /// <summary>
@@ -58,41 +52,42 @@ namespace Puzzle_XML
             string path = @"Collezione.xml";
             XDocument xmlDoc = XDocument.Load(path);
             XElement xmlpuzzles = xmlDoc.Element("puzzles");
-            var xmlpuzzle = xmlpuzzles.Elements("puzzle");
+            var xmlpuzzlelist = xmlpuzzles.Elements("puzzle");
 
             //scorre la lista
-            foreach (var item in xmlpuzzle)
+            foreach (var xmlpuzzle in xmlpuzzlelist)
             {
                 //se c'è stata richiesta di stop si esce dal ciclo
                 if (ct.Token.IsCancellationRequested)
                     break;
 
-                //aggiunta elemento
-                Add(item);
+                //creazione nuovo puzzle
+                Puzzle p = NuovaPuzzle(xmlpuzzle);
 
                 //aggiunta alla listbox
-                Dispatcher.Invoke(() => Update(puzzles));
+                Dispatcher.Invoke(() => Update(p));
 
                 //attesa che simula calcoli pesanti
                 Thread.Sleep(1500);
             }
+
+            //riattivamento del bottone di visualizzazione
+            Dispatcher.Invoke(() => btn_visualize.IsEnabled = true);
         }
 
         /// <summary>
         /// aggiorna interafaccia
         /// </summary>
-        private void Update(List<Puzzle> list)
+        private void Update(Puzzle p)
         {
-            lst_collection.Items.Clear();
-            foreach (var item in list)
-                lst_collection.Items.Add(item);
+            lst_collection.Items.Add(p);
         }
 
         /// <summary>
         /// aggiunta puzzle alla lista
         /// </summary>
         /// <param name="item"></param>
-        private void Add(XElement item)
+        private Puzzle NuovaPuzzle(XElement item)
         {
             //ricavo informazioni da xml
             XElement xmlName = item.Element("name");
@@ -110,8 +105,7 @@ namespace Puzzle_XML
             else
                 p.Solved = false;
 
-            //aggiunta puzzle alla lista
-            puzzles.Add(p);
+            return p;
         }
 
         /// <summary>
@@ -122,6 +116,9 @@ namespace Puzzle_XML
         private void Btn_stop_Click(object sender, RoutedEventArgs e)
         {
             ct.Cancel();
+
+            //riattivamento del bottone di visualizzazione
+            btn_visualize.IsEnabled = true;
         }
     }
 }

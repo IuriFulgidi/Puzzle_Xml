@@ -28,12 +28,8 @@ namespace Puzzle_XML
         public MainWindow()
         {
             InitializeComponent();
-            lbl_solve.HorizontalContentAlignment = HorizontalAlignment.Center;
-            lbl_solve.VerticalContentAlignment = VerticalAlignment.Center;
 
-            lbl_solve.Visibility = Visibility.Hidden;
-            btn_yes.Visibility = Visibility.Hidden;
-            btn_no.Visibility = Visibility.Hidden;
+            btn_scrambleSolve.Visibility = Visibility.Hidden;
         }
 
         private void Btn_visualize_Click(object sender, RoutedEventArgs e)
@@ -139,20 +135,24 @@ namespace Puzzle_XML
                 lst_selectedPuzzle.Items.Add($"it has {p.NFaces} faces");
                 lst_selectedPuzzle.Items.Add($"it has {p.NStates} possible states");
                 if (p.Solved)
+                {
                     lst_selectedPuzzle.Items.Add($"is solved");
+                    btn_scrambleSolve.Content = "Scramlbe?";
+                }
+                    
                 else
+                {
                     lst_selectedPuzzle.Items.Add($"is not solved");
+                    btn_scrambleSolve.Content = "Solve?";
+                }
 
-                lbl_solve.Visibility = Visibility.Visible;
-                btn_yes.Visibility = Visibility.Visible;
-                btn_no.Visibility = Visibility.Visible;
+
+                
+
+                btn_scrambleSolve.Visibility = Visibility.Visible;
             }
             else
-            {
-                lbl_solve.Visibility = Visibility.Hidden;
-                btn_yes.Visibility = Visibility.Hidden;
-                btn_no.Visibility = Visibility.Hidden;
-            }
+                btn_scrambleSolve.Visibility = Visibility.Hidden;
         }
     }
 }

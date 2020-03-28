@@ -28,6 +28,8 @@ namespace Puzzle_XML
         public MainWindow()
         {
             InitializeComponent();
+
+
         }
 
         private void Btn_visualize_Click(object sender, RoutedEventArgs e)
@@ -62,7 +64,7 @@ namespace Puzzle_XML
                     break;
 
                 //creazione nuovo puzzle
-                Puzzle p = NuovaPuzzle(xmlpuzzle);
+                Puzzle p = NuovoPuzzle(xmlpuzzle);
 
                 //aggiunta alla listbox
                 Dispatcher.Invoke(() => Update(p));
@@ -87,7 +89,7 @@ namespace Puzzle_XML
         /// aggiunta puzzle alla lista
         /// </summary>
         /// <param name="item"></param>
-        private Puzzle NuovaPuzzle(XElement item)
+        private Puzzle NuovoPuzzle(XElement item)
         {
             //ricavo informazioni da xml
             XElement xmlName = item.Element("name");
@@ -119,6 +121,24 @@ namespace Puzzle_XML
 
             //riattivamento del bottone di visualizzazione
             btn_visualize.IsEnabled = true;
+        }
+
+        private void Lst_collection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Puzzle p = lst_collection.SelectedItem as Puzzle;
+
+            lst_selectedPuzzle.Items.Clear();
+
+            if (p != null)
+            {
+                lst_selectedPuzzle.Items.Add(p.Name);
+                lst_selectedPuzzle.Items.Add($"it has {p.NFaces} faces");
+                lst_selectedPuzzle.Items.Add($"it has {p.NStates} possible states");
+                if (p.Solved)
+                    lst_selectedPuzzle.Items.Add($"is solved");
+                else
+                    lst_selectedPuzzle.Items.Add($"is not solved");
+            }
         }
     }
 }

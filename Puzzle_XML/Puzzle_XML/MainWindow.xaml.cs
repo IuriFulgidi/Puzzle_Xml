@@ -28,8 +28,12 @@ namespace Puzzle_XML
         public MainWindow()
         {
             InitializeComponent();
+            lbl_solve.HorizontalContentAlignment = HorizontalAlignment.Center;
+            lbl_solve.VerticalContentAlignment = VerticalAlignment.Center;
 
-
+            lbl_solve.Visibility = Visibility.Hidden;
+            btn_yes.Visibility = Visibility.Hidden;
+            btn_no.Visibility = Visibility.Hidden;
         }
 
         private void Btn_visualize_Click(object sender, RoutedEventArgs e)
@@ -138,6 +142,16 @@ namespace Puzzle_XML
                     lst_selectedPuzzle.Items.Add($"is solved");
                 else
                     lst_selectedPuzzle.Items.Add($"is not solved");
+
+                lbl_solve.Visibility = Visibility.Visible;
+                btn_yes.Visibility = Visibility.Visible;
+                btn_no.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                lbl_solve.Visibility = Visibility.Hidden;
+                btn_yes.Visibility = Visibility.Hidden;
+                btn_no.Visibility = Visibility.Hidden;
             }
         }
     }

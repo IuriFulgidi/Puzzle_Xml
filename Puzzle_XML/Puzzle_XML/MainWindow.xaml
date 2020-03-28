@@ -10,18 +10,29 @@
         <Grid.Background>
             <ImageBrush ImageSource="Puzzles.jpg"/>
         </Grid.Background>
-        <Button x:Name="btn_visualize" Content="Visualizza" HorizontalAlignment="Left" Margin="135,58,0,0" VerticalAlignment="Top" Width="120" Click="Btn_visualize_Click" Height="55" FontSize="20"/>
-        <ListBox x:Name="lst_collection" HorizontalAlignment="Left" Height="216" Margin="135,140,0,0" VerticalAlignment="Top" Width="330" OpacityMask="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" FontWeight="Bold" FontSize="16" SelectionChanged="Lst_collection_SelectionChanged">
+        <Button x:Name="btn_visualize" Content="Visualize" HorizontalAlignment="Left" Margin="59,56,0,0" VerticalAlignment="Top" Width="120" Click="Btn_visualize_Click" Height="55" FontSize="20"/>
+        <ListBox x:Name="lst_collection" HorizontalAlignment="Left" Height="216" Margin="59,138,0,0" VerticalAlignment="Top" Width="330" OpacityMask="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" FontWeight="Bold" FontSize="16" SelectionChanged="Lst_collection_SelectionChanged">
             <ListBox.Background>
                 <SolidColorBrush Color="#FFA6C0F7" Opacity="0.7"/>
             </ListBox.Background>
         </ListBox>
-        <Button x:Name="btn_stop" Content="Ferma" HorizontalAlignment="Left" Margin="345,58,0,0" VerticalAlignment="Top" Width="120" Click="Btn_stop_Click" Height="55" FontSize="20" Background="#FFFF1212" Foreground="White" FontWeight="Bold"/>
-        <ListBox x:Name="lst_selectedPuzzle" HorizontalAlignment="Left" Height="216" Margin="520,140,0,0" VerticalAlignment="Top" Width="205">
+        <Button x:Name="btn_stop" Content="Stop" HorizontalAlignment="Left" Margin="269,56,0,0" VerticalAlignment="Top" Width="120" Click="Btn_stop_Click" Height="55" FontSize="20" Background="#FFFF1212" Foreground="White" FontWeight="Bold"/>
+        <ListBox x:Name="lst_selectedPuzzle" HorizontalAlignment="Left" Height="132" Margin="449,222,0,0" VerticalAlignment="Top" Width="278">
             <ListBox.Background>
                 <SolidColorBrush Color="#FFA6C0F7" Opacity="0.7"/>
             </ListBox.Background>
         </ListBox>
+        <Label x:Name="lbl_solve" Content="Do you want to solve it?" HorizontalAlignment="Left" Margin="449,56,0,0" VerticalAlignment="Top" Height="55" Width="278" Foreground="Black" FontSize="20">
+            <Label.Background>
+                <SolidColorBrush Color="#FFA6C0F7" Opacity="0.7"/>
+            </Label.Background>
+        </Label>
+        <Button x:Name="btn_yes" Content="Yes" HorizontalAlignment="Left" Margin="449,138,0,0" VerticalAlignment="Top" Width="120" Height="55" FontSize="20">
+            <Button.Background>
+                <SolidColorBrush Color="#FF3AFF00"/>
+            </Button.Background>
+        </Button>
+        <Button x:Name="btn_no" Content="No" HorizontalAlignment="Left" Margin="607,138,0,0" VerticalAlignment="Top" Width="120" Height="55" FontSize="20" Background="Red"/>
 
     </Grid>
 </Window>

@@ -22,7 +22,7 @@
                 <SolidColorBrush Color="#FFA6C0F7" Opacity="0.7"/>
             </ListBox.Background>
         </ListBox>
-        <Button x:Name="btn_scrambleSolve" Content="Solve it?" HorizontalAlignment="Left" Margin="515,56,0,0" VerticalAlignment="Top" Width="138" Height="55" FontSize="20" Background="White"/>
+        <Button x:Name="btn_scrambleSolve" Content="Solve it?" HorizontalAlignment="Left" Margin="515,56,0,0" VerticalAlignment="Top" Width="138" Height="55" FontSize="20" Background="White" Click="Btn_scrambleSolve_Click"/>
 
     </Grid>
 </Window>

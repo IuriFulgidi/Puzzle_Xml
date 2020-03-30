@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace Puzzle_XML
@@ -139,20 +140,48 @@ namespace Puzzle_XML
                     lst_selectedPuzzle.Items.Add($"is solved");
                     btn_scrambleSolve.Content = "Scramlbe?";
                 }
-                    
                 else
                 {
                     lst_selectedPuzzle.Items.Add($"is not solved");
                     btn_scrambleSolve.Content = "Solve?";
                 }
 
-
-                
-
                 btn_scrambleSolve.Visibility = Visibility.Visible;
             }
             else
                 btn_scrambleSolve.Visibility = Visibility.Hidden;
+        }
+
+        private void Btn_scrambleSolve_Click(object sender, RoutedEventArgs e)
+        { 
+            //sio carica il documento
+            XmlDocument doc = new XmlDocument();
+            doc.Load(@"Collezione.xml");
+
+            //si fa una lista di tutti i nodi che rappresentano un puzzle 
+            XmlNodeList aNodes = doc.SelectNodes("/puzzles/puzzle");
+            
+            //loop su tutti i nodi
+            foreach (XmlNode aNode in aNodes)
+            {
+                //si guarda l'attributo "solved"
+                XmlAttribute idAttribute = aNode.Attributes["solved"];
+
+                //si controlla che l'attributo esista
+                if (idAttribute != null)
+                {
+                    //si prende il suo valore
+                    string currentValue = idAttribute.Value;
+
+                    if (currentValue == "yes")
+                        idAttribute.Value = "no";
+                    else
+                        idAttribute.Value = "yes";
+                }
+            }
+
+            //si salva il documento
+            doc.Save(@"Collezione.xml");
         }
     }
 }

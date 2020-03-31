@@ -1,20 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace Puzzle_XML
 {
@@ -47,7 +39,7 @@ namespace Puzzle_XML
         }
 
         /// <summary>
-        /// cerica la lista
+        /// carica la lista
         /// </summary>
         private void Load()
         {
@@ -71,7 +63,7 @@ namespace Puzzle_XML
                 Dispatcher.Invoke(() => Update(p));
 
                 //attesa che simula calcoli pesanti
-                Thread.Sleep(1500);
+                Thread.Sleep(1000);
             }
 
             //riattivamento del bottone di visualizzazione
@@ -94,19 +86,18 @@ namespace Puzzle_XML
         {
             //ricavo informazioni da xml
             XElement xmlName = item.Element("name");
-            XElement xmlstates = item.Element("nStates");
+            XElement xmlShape = item.Element("shape");
             XElement xmlSolved = item.Element("solved");
-            XElement xmlfaces = item.Element("nFaces");
+            XElement xmlFaces = item.Element("nFaces");
+            XElement xmlId = item.Element("id");
 
             //creazione puzzle
             Puzzle p = new Puzzle();
             p.Name = xmlName.Value;
-            p.NStates = xmlstates.Value;
-            p.NFaces = Convert.ToInt32(xmlfaces.Value);
-            if (xmlSolved.Value == "yes")
-                p.Solved = true;
-            else
-                p.Solved = false;
+            p.Shape = xmlShape.Value;
+            p.NFaces = Convert.ToInt32(xmlFaces.Value);
+            p.Solved = xmlSolved.Value;
+            p.NFaces = Convert.ToInt32(xmlId.Value);
 
             return p;
         }
@@ -126,16 +117,17 @@ namespace Puzzle_XML
 
         private void Lst_collection_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            //si prende il puzzle selezionato
             Puzzle p = lst_collection.SelectedItem as Puzzle;
-
             lst_selectedPuzzle.Items.Clear();
 
             if (p != null)
             {
+                //aggiunta caratteristicche del puzzle alla listbox
                 lst_selectedPuzzle.Items.Add(p.Name);
                 lst_selectedPuzzle.Items.Add($"it has {p.NFaces} faces");
-                lst_selectedPuzzle.Items.Add($"it has {p.NStates} possible states");
-                if (p.Solved)
+                lst_selectedPuzzle.Items.Add($"it has {p.Shape} possible states");
+                if (p.Solved=="yes")
                 {
                     lst_selectedPuzzle.Items.Add($"is solved");
                     btn_scrambleSolve.Content = "Scramlbe?";
@@ -145,7 +137,6 @@ namespace Puzzle_XML
                     lst_selectedPuzzle.Items.Add($"is not solved");
                     btn_scrambleSolve.Content = "Solve?";
                 }
-
                 btn_scrambleSolve.Visibility = Visibility.Visible;
             }
             else
@@ -153,35 +144,64 @@ namespace Puzzle_XML
         }
 
         private void Btn_scrambleSolve_Click(object sender, RoutedEventArgs e)
-        { 
-            //sio carica il documento
-            XmlDocument doc = new XmlDocument();
-            doc.Load(@"Collezione.xml");
+        {
+            Task.Factory.StartNew(()=>UpdateCollection());
+            Puzzle p = lst_collection.SelectedItem as Puzzle;
+            if (p.Solved == "yes")
+                MessageBox.Show($"{p.Name} succefully scrambled", "Update!", MessageBoxButton.OK, MessageBoxImage.Information);
+            else
+                MessageBox.Show($"{p.Name} succefully solved", "Update!", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
 
-            //si fa una lista di tutti i nodi che rappresentano un puzzle 
-            XmlNodeList aNodes = doc.SelectNodes("/puzzles/puzzle");
-            
-            //loop su tutti i nodi
-            foreach (XmlNode aNode in aNodes)
+        private void UpdateCollection()
+        {
+            //percorso del file originale
+            string path = @"Collezione.xml";
+
+            //si prende l'id del puzzle selezionato
+            int id = Dispatcher.Invoke(()=>GetId());
+
+            //si parte dalla radice
+            XElement xmlCollezione = new XElement("puzzles");
+
+            //si scorre tutto il vecchio file pre creare il nuovo
+            foreach (Puzzle puzzle in lst_collection.Items)
             {
-                //si guarda l'attributo "solved"
-                XmlAttribute idAttribute = aNode.Attributes["solved"];
-
-                //si controlla che l'attributo esista
-                if (idAttribute != null)
+                //si controlla per id
+                if (puzzle.Id == id)
                 {
-                    //si prende il suo valore
-                    string currentValue = idAttribute.Value;
-
-                    if (currentValue == "yes")
-                        idAttribute.Value = "no";
+                    if (puzzle.Solved == "yes")
+                        puzzle.Solved = "no";
                     else
-                        idAttribute.Value = "yes";
+                        puzzle.Solved = "yes";
                 }
+
+                //si crea il nuovo puzzle
+                XElement xmlPuzzle = new XElement("puzzle");
+                XElement xmlName = new XElement("name", puzzle.Name);
+                XElement xmlShape = new XElement("shape", puzzle.Shape);
+                XElement xmlNFaces = new XElement("nFaces", puzzle.NFaces);
+                XElement xmlId = new XElement("id", puzzle.Id);
+                XElement xmlSolved = new XElement("solved", puzzle.Solved);
+
+                //si danno le proprietà al puzzle
+                xmlPuzzle.Add(xmlName);
+                xmlPuzzle.Add(xmlShape);
+                xmlPuzzle.Add(xmlNFaces);
+                xmlPuzzle.Add(xmlId);
+                xmlPuzzle.Add(xmlSolved);
+
+                //si aggiunge il puzzle alla collezione
+                xmlCollezione.Add(xmlPuzzle);
             }
 
-            //si salva il documento
-            doc.Save(@"Collezione.xml");
+            //si salva il file
+            xmlCollezione.Save(path);
+        }
+
+        private int GetId()
+        {
+            return (lst_collection.SelectedItem as Puzzle).Id;
         }
     }
 }

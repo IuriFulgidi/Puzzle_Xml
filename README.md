@@ -1,6 +1,6 @@
 # Puzzle_Xml
-se non carica la cartella debug ecco l'xml originale
-"<?xml version="1.0"?>
+se non carica la cartella debug ecco l'xml originale(vedere in raw)
+<?xml version="1.0"?>
 <puzzles>
   <puzzle>
     <name>rubik's cube</name>
@@ -37,4 +37,4 @@ se non carica la cartella debug ecco l'xml originale
     <id>5</id>
     <solved>no</solved>
   </puzzle>
-</puzzles>" 
+</puzzles>

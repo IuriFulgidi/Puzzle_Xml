@@ -37,4 +37,4 @@ se non carica la cartella debug ecco l'xml originale
     <id>5</id>
     <solved>no</solved>
   </puzzle>
-</puzzles>"
+</puzzles>" 
